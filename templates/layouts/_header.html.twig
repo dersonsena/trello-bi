@@ -1,0 +1,60 @@
+<!-- HEADER -->
+<header id="header" class="header">
+    <div class="container">
+
+        <!-- LOGO -->
+        <div class="logo">
+            <a href="/"><img src="/images/logo-devtube.png" alt=""></a>
+        </div>
+        <!-- END / LOGO -->
+
+        <!-- NAVIGATION -->
+        <nav class="navigation">
+
+            <div class="open-menu">
+                <span class="item item-1"></span>
+                <span class="item item-2"></span>
+                <span class="item item-3"></span>
+            </div>
+
+            {% set homeClass = '' %}
+            {% set academicClass = '' %}
+
+            {% if currentRoute == '/' %}
+                {% set homeClass = 'current-menu-item' %}
+            {% elseif currentRoute == '/academico' or currentRoute == '/academico/login' %}
+                {% set academicClass = 'current-menu-item' %}
+            {% endif %}
+
+            <!-- MENU -->
+            <ul class="menu">
+                <li class="{{ homeClass }}"><a href="/">Home</a></li>
+                {% if studentIdentity is not defined %}
+                    <li class="{{ academicClass }}"><a href="/academico">Área do Aluno</a></li>
+                {% endif %}
+            </ul>
+            <!-- END / MENU -->
+
+            <!-- LIST ACCOUNT INFO -->
+            {% if studentIdentity is defined %}
+                <ul class="list-account-info">
+                    <li class="list-item account">
+                        <div class="account-info item-click">
+                            <img src="{{ studentIdentity.getAvatar() }}" alt="{{ studentIdentity.getName() }}">
+                        </div>
+                        <div class="toggle-account toggle-list">
+                            <ul class="list-account">
+                                <li><a href="setting.html"><i class="icon md-config"></i>Configurações</a></li>
+                                <li><a href="/academico/logout"><i class="icon md-arrow-right"></i>Sair</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            {% endif %}
+            <!-- END / LIST ACCOUNT INFO -->
+
+        </nav>
+        <!-- END / NAVIGATION -->
+    </div>
+</header>
+<!-- END / HEADER -->
