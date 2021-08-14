@@ -1,12 +1,12 @@
 <?php
 
-use App\Api\Trello\TrelloApi;
+use App\Adapter\Trello\TrelloApi;
 use App\Shared\Adapter\Contracts\HttpClient;
+use App\Shared\Infra\TwigAdapter;
 use DI\Container;
 use DI\ContainerBuilder;
 use Odan\Session\SessionInterface;
 use Slim\Flash\Messages;
-use Slim\Views\Twig;
 
 $containerBuilder = new ContainerBuilder();
 
@@ -27,16 +27,10 @@ $container->set('config', function() {
 });
 
 $container->set('view', function () use ($container) {
-    $twig = Twig::create(
-        __DIR__ . '/../templates',
-        ['cache' => APP_IS_PRODUCTION ? __DIR__ . '/../var/cache' : false]
-    );
-
+    $twigConfig = $container->get('config')['twig'];
     $flash = $container->get(Messages::class);
-    $twig->getEnvironment()->addGlobal('session', $container->get(SessionInterface::class));
-    $twig->getEnvironment()->addGlobal('flash', $flash);
-    $twig->getEnvironment()->addGlobal('sessionCookieName', 'gettobi');
-    return $twig;
+    $session = $container->get(SessionInterface::class);
+    return new TwigAdapter($twigConfig, $flash, $session);
 });
 
 $container->set('trelloApi', function(Container $container) {

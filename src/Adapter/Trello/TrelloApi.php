@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Api\Trello;
+namespace App\Adapter\Trello;
 
 use App\Shared\Adapter\Contracts\HttpClient;
 

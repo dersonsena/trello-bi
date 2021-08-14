@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
+use App\Adapter\Http\DashboardController;
+use App\Shared\Adapter\Http\SlimRouteAdapter;
 use Slim\App;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-    $app->get('/', function (Request $request, Response $response) {
-        $response->getBody()->write('Dashboard');
-        return $response;
+    $app->get('/', function (Request $request, Response $response, array $args) use ($app) {
+        return SlimRouteAdapter::create(DashboardController::class, $app, $request, $response, $args);
     })->setName('dashboard');
 
     $app->group('/boards', function (Group $group) {

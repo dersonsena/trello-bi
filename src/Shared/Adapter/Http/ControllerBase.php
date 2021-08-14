@@ -1,0 +1,109 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Shared\Adapter\Http;
+
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use Throwable;
+
+abstract class ControllerBase implements Controller
+{
+    private Request $request;
+    private Response $response;
+    protected array $args;
+    protected array $body;
+    protected TemplateEngine $view;
+    private int $statusCode = 200;
+
+    abstract public function handle(Request $request): Response;
+
+    public function execute(Request $request, Response $response, array $args = []): Response
+    {
+        $this->request = $request;
+        $this->response = $response;
+        $this->args = $args;
+        $this->body = $this->parseBody();
+
+        try {
+            return $this->handle($this->request)
+                ->withHeader('Content-Type', 'text/html')
+                ->withStatus($this->statusCode);
+
+        } catch (Throwable $e) {
+            $this->response->getBody()->write("
+                <h1>{$e->getMessage()}</h1>
+                <h2>{$e->getFile()}: {$e->getLine()}</h2>
+                <pre>{$e->getTraceAsString()}</pre>"
+            );
+
+            return $this->response
+                ->withHeader('Content-Type', 'text/html')
+                ->withStatus(500);
+        }
+    }
+
+    public function setTemplateEngine(TemplateEngine $templateEngine): void
+    {
+        $this->view = $templateEngine;
+    }
+
+    /**
+     * @param string $templatePath
+     * @param array $params
+     * @return Response
+     */
+    protected function render(string $templatePath, array $params = []): Response
+    {
+        return $this->view->render($this->response, $templatePath, $params);
+    }
+
+    /**
+     * @param string $url
+     * @return Response
+     */
+    protected function redirect(string $url): Response
+    {
+        return $this->response
+            ->withStatus(302)
+            ->withHeader('Location', $url);
+    }
+
+    /**
+     * @return Response
+     */
+    protected function refresh(): Response
+    {
+        return $this->redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPost(): bool
+    {
+        return $this->request->getMethod() === 'POST';
+    }
+
+    /**
+     * @return array
+     */
+    private function parseBody(): array
+    {
+        $contentType = $this->request->getHeaderLine('Content-Type');
+
+        if (!strstr($contentType, 'application/json')) {
+            return [];
+        }
+
+        $contents = json_decode(file_get_contents('php://input'), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return [];
+        }
+
+        $request = $this->request->withParsedBody($contents);
+        return (array)$request->getParsedBody();
+    }
+}

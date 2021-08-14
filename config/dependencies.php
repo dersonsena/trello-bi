@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Shared\Adapter\Contracts\HttpClient;
+use App\Shared\Adapter\Http\TemplateEngine;
 use App\Shared\Infra\GuzzleHttpClient;
+use App\Shared\Infra\TwigAdapter;
 use DI\ContainerBuilder;
 use Odan\Session\Middleware\SessionMiddleware;
 use Odan\Session\PhpSession;
@@ -14,7 +16,8 @@ use Slim\Flash\Messages;
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
         // Adapters
-        HttpClient::class => DI\autowire(GuzzleHttpClient::class),
+        HttpClient::class => GuzzleHttpClient::class,
+        TemplateEngine::class => TwigAdapter::class,
 
         // Interface Implementations
         SessionInterface::class => function (ContainerInterface $c) {

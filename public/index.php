@@ -10,20 +10,23 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 defined('DS') or define('DS', DIRECTORY_SEPARATOR);
+defined('ROOT_PATH') or define('ROOT_PATH', dirname(__DIR__));
+defined('CONFIG_PATH') or define('CONFIG_PATH', ROOT_PATH . DS . 'config');
+defined('APP_PATH') or define('APP_PATH', ROOT_PATH . DS . 'src');
 defined('APP_ENV') or define('APP_ENV', $_ENV['APP_ENV']);
 defined('APP_IS_PRODUCTION') or define('APP_IS_PRODUCTION', APP_ENV === 'production');
 
-require_once __DIR__ . '/../config/dic.php';
+require_once CONFIG_PATH . '/dic.php';
 
 // Add Twig-View Middleware
 $app = AppFactory::createFromContainer($container);
 
 // Register middleware
-$middleware = require __DIR__ . '/../config/middleware.php';
+$middleware = require CONFIG_PATH . '/middleware.php';
 $middleware($app);
 
 // Register routes
-$routes = require __DIR__ . '/../config/routes.php';
+$routes = require CONFIG_PATH . '/routes.php';
 $routes($app);
 
 // Create Request object from globals

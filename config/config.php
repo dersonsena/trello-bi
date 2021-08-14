@@ -14,6 +14,10 @@ return [
         'apiKey' => $_ENV['TRELLO_API_KEY'],
         'token' => $_ENV['TRELLO_TOKEN'],
     ],
+    'twig' => [
+        'templatePath' => ROOT_PATH . '/templates',
+        'cachePath' => ROOT_PATH . '/var/cache'
+    ]
     /*'database' => [
         'host' => $_ENV['DB_HOST'],
         'port' => $_ENV['DB_PORT'],
