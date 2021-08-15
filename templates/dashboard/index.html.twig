@@ -3,5 +3,22 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <h1>Dashboard maroto!</h1>
+    <h1 class="text-center">Seus Boards</h1>
+    <hr>
+    <div class="row">
+    {% for board in boards %}
+        <div class="col-md-3 mb-3">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ board.name }}</h5>
+                    <a href="{{ board.url }}" target="_blank" class="card-link">Ver no Trello</a>
+                    <a href="{{ url_for('board-cards', { 'id': board.id }) }}" class="card-link">Cards</a>
+                </div>
+                <div class="card-footer text-muted">
+                    <small>Última atualização: {{ board.lastActivity }}</small>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
 {% endblock %}

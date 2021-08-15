@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Adapter\Http;
 
+use App\Shared\Infra\TemplateEngineFactory;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
@@ -17,14 +18,25 @@ abstract class ControllerBase implements Controller
     protected TemplateEngine $view;
     private int $statusCode = 200;
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     abstract public function handle(Request $request): Response;
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
     public function execute(Request $request, Response $response, array $args = []): Response
     {
         $this->request = $request;
         $this->response = $response;
         $this->args = $args;
         $this->body = $this->parseBody();
+        $this->view = TemplateEngineFactory::get();
 
         try {
             return $this->handle($this->request)
@@ -44,9 +56,14 @@ abstract class ControllerBase implements Controller
         }
     }
 
-    public function setTemplateEngine(TemplateEngine $templateEngine): void
+    /**
+     * @param TemplateEngine $templateEngine
+     * @return Controller
+     */
+    public function setTemplateEngine(TemplateEngine $templateEngine): Controller
     {
         $this->view = $templateEngine;
+        return $this;
     }
 
     /**

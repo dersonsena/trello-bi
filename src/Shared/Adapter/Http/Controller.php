@@ -10,5 +10,5 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 interface Controller
 {
     public function execute(Request $request, Response $response, array $args = []): Response;
-    public function setTemplateEngine(TemplateEngine $templateEngine): void;
+    public function setTemplateEngine(TemplateEngine $templateEngine): Controller;
 }

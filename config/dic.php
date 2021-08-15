@@ -1,7 +1,7 @@
 <?php
 
-use App\Adapter\Trello\TrelloApi;
-use App\Shared\Adapter\Contracts\HttpClient;
+use App\Infra\TrelloApiConnection;
+use App\Shared\Adapter\Http\HttpClient;
 use App\Shared\Infra\TwigAdapter;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -16,6 +16,9 @@ if (APP_IS_PRODUCTION) {
 
 $dependencies = require __DIR__ . '/dependencies.php';
 $dependencies($containerBuilder);
+
+$adapters = require __DIR__ . '/adapters.php';
+$adapters($containerBuilder);
 
 $repositories = require __DIR__ . '/repositories.php';
 $repositories($containerBuilder);
@@ -33,7 +36,7 @@ $container->set('view', function () use ($container) {
     return new TwigAdapter($twigConfig, $flash, $session);
 });
 
-$container->set('trelloApi', function(Container $container) {
+$container->set(TrelloApiConnection::class, function(Container $container) {
     $trelloConfig = $container->get('config')['trello'];
-    return new TrelloApi($container->get(HttpClient::class), $trelloConfig);
+    return new TrelloApiConnection($container->get(HttpClient::class), $trelloConfig);
 });

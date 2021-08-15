@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Infra;
 
-use App\Shared\Adapter\Contracts\HttpClient;
+use App\Shared\Adapter\Http\HttpClient;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface as Response;
 

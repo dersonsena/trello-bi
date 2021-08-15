@@ -8,9 +8,9 @@ use App\Shared\Middleware\TwigMiddleware;
 use Slim\App;
 
 return function (App $app) {
+    $app->addBodyParsingMiddleware();
+    $app->addRoutingMiddleware();
     $app->add(SessionMiddleware::class);
     //$app->add(SlimFlashMiddleware::class);
     $app->add(TwigMiddleware::createFromContainer($app));
-    $app->addRoutingMiddleware();
-    $app->addRoutingMiddleware();
 };

@@ -11,6 +11,7 @@ return [
         'cookie_secure' => APP_IS_PRODUCTION
     ],
     'trello' => [
+        'baseUrl' => 'https://api.trello.com/1',
         'apiKey' => $_ENV['TRELLO_API_KEY'],
         'token' => $_ENV['TRELLO_TOKEN'],
     ],

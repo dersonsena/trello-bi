@@ -18,8 +18,8 @@ defined('APP_IS_PRODUCTION') or define('APP_IS_PRODUCTION', APP_ENV === 'product
 
 require_once CONFIG_PATH . '/dic.php';
 
-// Add Twig-View Middleware
-$app = AppFactory::createFromContainer($container);
+AppFactory::setContainer($container);
+$app = AppFactory::create();
 
 // Register middleware
 $middleware = require CONFIG_PATH . '/middleware.php';

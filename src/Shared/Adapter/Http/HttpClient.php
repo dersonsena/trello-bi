@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Adapter\Contracts;
+namespace App\Shared\Adapter\Http;
 
 use Psr\Http\Message\ResponseInterface as Response;
 
