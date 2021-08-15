@@ -40,7 +40,7 @@ abstract class EntityBase implements Entity
      * @return EntityBase
      * @throws EntityException
      */
-    public static function create(array $values): Entity
+    public static function create(array $values): self
     {
         return new static($values);
     }

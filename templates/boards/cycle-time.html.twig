@@ -1,0 +1,110 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Board {{ board.name }}{% endblock %}
+{% block scripts %}
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/themes/sand-signika.js"></script>
+    <script type="text/javascript">
+        Highcharts.chart('container', {
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Data Versus Somatório de Tasks em Done'
+            },
+            subtitle: {
+                text: 'Período: xx/xx/xxxx até xx/xx/xxxx'
+            },
+            xAxis: {
+                type: 'datetime',
+                dateFormat: 'dd/mm',
+                title: {
+                    enabled: true,
+                    text: 'Data'
+                },
+                dateTimeLabelFormats: {
+                    month: '%e %b %Y',
+                    year: '%Y'
+                },
+                startOnTick: true,
+                endOnTick: true,
+                showLastLabel: true
+            },
+            yAxis: {
+                title: {
+                    text: 'Tasks (Somatório)'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 100,
+                y: 70,
+                floating: true,
+                backgroundColor: Highcharts.defaultOptions.chart.backgroundColor,
+                borderWidth: 1
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 5,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100,100,100)'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{series.name}</b><br>',
+                        pointFormat: 'Data: {point.x:%d/%m/%y}<br>{point.y} task(s)'
+                    }
+                }
+            },
+            series: [{
+                name: 'Soma Tasks',
+                color: 'rgba(223, 83, 83, .5)',
+                data: [
+                    [Date.UTC(2021, 6, 23), 3],
+                    [Date.UTC(2021, 6, 24), 2],
+                    [Date.UTC(2021, 6, 25), 2],
+                    [Date.UTC(2021, 6, 26), 5],
+                    [Date.UTC(2021, 6, 27), 8],
+                    [Date.UTC(2021, 6, 28), null],
+                    [Date.UTC(2021, 6, 29), null],
+                    [Date.UTC(2021, 6, 30), 7],
+                    [Date.UTC(2021, 7, 1), 6],
+                    [Date.UTC(2021, 7, 2), 9],
+                    [Date.UTC(2021, 7, 3), 5],
+                    [Date.UTC(2021, 7, 4), 2],
+                    [Date.UTC(2021, 7, 5), 2],
+                    [Date.UTC(2021, 7, 6), 2],
+                    [Date.UTC(2021, 7, 7), 2]
+                ]
+            }]
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1>Board: {{ board.name }}</h1>
+        <a href="{{ url_for('dashboard') }}" title="Voltar para seus boards">Meus Boards</a>
+    </div>
+    <hr>
+
+    <h2>Cycle Time</h2>
+    <div id="container"></div>
+{% endblock %}

@@ -10,12 +10,23 @@
         <div class="col-md-3 mb-3">
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
-                    <h5 class="card-title">{{ board.name }}</h5>
-                    <a href="{{ board.url }}" target="_blank" class="card-link">Ver no Trello</a>
-                    <a href="{{ url_for('board-cards', { 'id': board.id }) }}" class="card-link">Cards</a>
+                    <h5 class="card-title">
+                        <i class="fas fa-layer-group"></i> {{ board.name }}
+                    </h5>
+                    <a href="{{ url_for('board-cycle-time', { 'id': board.id }) }}" class="card-link">
+                        Cycle Time
+                    </a>
+                    <a href="{{ url_for('board-task-performance', { 'id': board.id }) }}" class="card-link">
+                        Task Performance
+                    </a>
                 </div>
                 <div class="card-footer text-muted">
-                    <small>Última atualização: {{ board.lastActivity }}</small>
+                    <a href="{{ board.url }}" target="_blank" class="card-link">
+                        <small>Ver no Trello</small>
+                    </a>
+                    <p>
+                        <small>Última atualização: {{ board.lastActivity }}</small>
+                    </p>
                 </div>
             </div>
         </div>

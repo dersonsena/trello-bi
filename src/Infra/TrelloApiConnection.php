@@ -29,6 +29,36 @@ final class TrelloApiConnection
         return $this;
     }
 
+    public function getBoard($boardId): self
+    {
+        $this->response = $this->httpClient->get(
+            $this->buildUrl(sprintf("/boards/%s", $boardId)),
+            $this->buildQueryParams()
+        );
+
+        return $this;
+    }
+
+    public function getBoardsCard($boardId): self
+    {
+        $this->response = $this->httpClient->get(
+            $this->buildUrl(sprintf("/boards/%s/cards", $boardId)),
+            $this->buildQueryParams()
+        );
+
+        return $this;
+    }
+
+    public function getCardActions($cardId, array $params = []): self
+    {
+        $this->response = $this->httpClient->get(
+            $this->buildUrl(sprintf("/cards/%s/actions", $cardId)),
+            $this->buildQueryParams($params)
+        );
+
+        return $this;
+    }
+
     public function asArray(): array
     {
         return json_decode((string)$this->response->getBody(), true);
@@ -39,7 +69,7 @@ final class TrelloApiConnection
         return $this->config['baseUrl'] . $url;
     }
 
-    private function buildQueryParams(array $params): array
+    private function buildQueryParams(array $params = []): array
     {
         return ['query' => array_merge($params, [
             'key' => $this->config['apiKey'],

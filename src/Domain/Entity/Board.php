@@ -19,12 +19,15 @@ final class Board extends EntityBase
 {
     protected string $name;
     protected Url $url;
-    protected DateTimeInterface $lastActivity;
+    protected ?DateTimeInterface $lastActivity;
 
-    public static function create(array $values): Entity
+    public static function create(array $values): self
     {
         $values['url'] = new Url($values['url']);
-        $values['lastActivity'] = new DateTimeImmutable($values['lastActivity']);
+        $values['lastActivity'] = isset($values['lastActivity']) ?
+            new DateTimeImmutable($values['lastActivity'])
+            : null;
+
         return parent::create($values);
     }
 }

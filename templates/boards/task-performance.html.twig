@@ -1,0 +1,106 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Board {{ board.name }}{% endblock %}
+{% block scripts %}
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/themes/sand-signika.js"></script>
+    <script type="text/javascript">
+        Highcharts.chart('container', {
+            chart: {
+                type: 'column',
+                animation: {
+                    duration: 1000
+                },
+            },
+            title: {
+                text: 'Horas Versus Tasks em Done'
+            },
+            subtitle: {
+                text: 'Período xx/xx/xxxx até xx/xx/xxxx'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                type: 'datetime',
+                title: {
+                    text: 'Qtde. Horas investidas'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y}'
+                    }
+                }
+            },
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> hora(s)<br/>'
+            },
+
+            series: [
+                {
+                    name: "Tasks",
+                    colorByPoint: true,
+                    data: [
+                        {
+                            name: "Task A",
+                            y: Date.UTC(2021, 1, 1, 5)
+                        },
+                        {
+                            name: "Task B",
+                            y: Date.UTC(2021, 1, 1, 7)
+                        },
+                        {
+                            name: "Task C",
+                            y: Date.UTC(2021, 1, 1, 8)
+                        },
+                        {
+                            name: "Task D",
+                            y: Date.UTC(2021, 1, 1, 2)
+                        },
+                        {
+                            name: "Task E",
+                            y: 8
+                        },
+                        {
+                            name: "Task F",
+                            y: 20
+                        },
+                        {
+                            name: "Task G",
+                            y: 7
+                        }
+                    ]
+                }
+            ],
+        });
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1>Board: {{ board.name }}</h1>
+        <a href="{{ url_for('dashboard') }}" title="Voltar para seus boards">Meus Boards</a>
+    </div>
+    <hr>
+
+    <h2>Task Performance</h2>
+    <div id="container"></div>
+{% endblock %}
